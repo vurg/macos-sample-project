@@ -1,0 +1,30 @@
+name: Build on macOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install CMake
+        run: brew install cmake
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Run CMake
+        run: cmake -S . -B build
+
+      - name: Build the project
+        run: cmake --build build
+
+      - name: Run executable
+        run: ./build/MacOSSample
