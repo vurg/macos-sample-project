@@ -1,16 +1,18 @@
 name: Test ucesb on macOS
 
 on:
-  push:
+  push:    # Runs on all branches
 #    branches: [ main ]
-  pull_request:
+  pull_request:    # Runs on all PRs
 #    branches: [ main ]
 
 jobs:
   test-macos:
     strategy:
+      fail-fast: false  # Critical: Allows all matrix jobs to complete
       matrix:
         os: [macos-13, macos-latest]
+        # os: [macos-13, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
@@ -21,7 +23,7 @@ jobs:
         brew update
         brew install git make gcc
 
-    - name: Clone ucesb
+    - name: Clone ucesb (SSH or HTTPS fallback)
       run: |
         git clone git@git.chalmers.se:expsubphys/ucesb.git || git clone https://git.chalmers.se/expsubphys/ucesb.git
         ls -la ucesb/  # Verify clone succeeded
