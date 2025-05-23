@@ -1,0 +1,35 @@
+name: Test ucesb on macOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-macos:
+    strategy:
+      matrix:
+        os: [macos-13, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install git make gcc
+
+    - name: Clone ucesb
+      run: git clone git@git.chalmers.se:expsubphys/ucesb.git
+
+    - name: Build empty unpacker
+      working-directory: ./ucesb
+      run: make empty
+
+    - name: Test with simulated input
+      working-directory: ./ucesb
+      run: |
+        file_input/empty_file --lmd | empty/empty --file=-
+        echo "Basic test completed successfully"
