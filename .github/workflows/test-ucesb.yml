@@ -22,7 +22,9 @@ jobs:
         brew install git make gcc
 
     - name: Clone ucesb
-      run: git clone git@git.chalmers.se:expsubphys/ucesb.git
+      run: |
+        git clone git@git.chalmers.se:expsubphys/ucesb.git || git clone https://git.chalmers.se/expsubphys/ucesb.git
+        ls -la ucesb/  # Verify clone succeeded
 
     - name: Build empty unpacker
       working-directory: ./ucesb
